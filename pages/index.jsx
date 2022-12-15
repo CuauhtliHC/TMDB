@@ -223,7 +223,7 @@ export default function Home({ popularMovies, popularTvShow }) {
 }
 
 export async function getServerSideProps() {
-  const token = process.env.TOKEN;
+  const token = process.env.TMDB_API_KEY;
   const resMovie = await fetch(
     `https://api.themoviedb.org/3/movie/popular?api_key=${token}&language=en-US&page=1`
   );
