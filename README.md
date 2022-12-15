@@ -1,4 +1,8 @@
-##Descripción
+<h1>TMDB</h1>
+
+<p>Este proyecto fue creado utilizando la API de The Movie Database (TMDB), Next.js y Node.js.</p>
+
+<h2>Descripción</h2>
 
 <p>Este proyecto es una aplicación web construida utilizando Next.js, Node.js y la API de The Movie Database (TMDB). La aplicación permite a los usuarios buscar y explorar películas y series de TV, así como obtener información detallada sobre ellos. Además, los usuarios pueden crear una lista de películas y series favoritas.</p>
 
@@ -6,7 +10,7 @@
 
 <p>En resumen, este proyecto combina el poder de Next.js, Node.js y la API de TMDB para crear una aplicación web atractiva y útil para cualquier amante del cine y la televisión.<p>
 
-##Instalación
+<h2>Instalación</h2>
 
 <p>Para instalar este proyecto en su máquina local, siga estos pasos:<p>
 
