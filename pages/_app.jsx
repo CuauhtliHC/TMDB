@@ -2,6 +2,7 @@ import Navbar from "../components/navbar/index";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { useState } from "react";
+import Footer from "../components/footer";
 
 function MyApp({ Component, pageProps }) {
   const [darkMode, setDarkMode] = useState(false);
@@ -17,8 +18,9 @@ function MyApp({ Component, pageProps }) {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Navbar toggleTheme={toggleTheme} />
+      <Navbar toggleTheme={toggleTheme} {...pageProps} />
       <Component {...pageProps} />
+      <Footer {...pageProps} darkMode />
     </ThemeProvider>
   );
 }
