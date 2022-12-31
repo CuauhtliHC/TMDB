@@ -18,8 +18,13 @@ import LocalMoviesIcon from "@mui/icons-material/LocalMovies";
 import { useState } from "react";
 import { styled, alpha } from "@mui/material/styles";
 import SearchIcon from "@mui/icons-material/Search";
+import { useRouter } from "next/router";
 
-const pages = ["Movies", "TvShows", "Users"];
+const pages = [
+  { name: "Movies", link: "/movies?page=1" },
+  { name: "TvShows", link: "/tvshow" },
+  { name: "Users", link: "/users" },
+];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 const Search = styled("div")(({ theme }) => ({
@@ -111,6 +116,7 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
 function ResponsiveAppBar({ toggleTheme }) {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
+  const router = useRouter();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -119,13 +125,27 @@ function ResponsiveAppBar({ toggleTheme }) {
     setAnchorElUser(event.currentTarget);
   };
 
-  const handleCloseNavMenu = () => {
+  const handleCloseNavMenu = (link) => {
+    if (link) router.push(link);
     setAnchorElNav(null);
   };
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  const onSearch = (event) => {
+    if (event.key === "Enter") {
+      if (event.target.value !== "") {
+        router.push(`${router.pathname}?page=1&search=${event.target.value}`);
+      }
+    }
+  };
+
+  let rout = false;
+
+  if (router.pathname === "/movies" || router.pathname === "/tvshow")
+    rout = true;
 
   return (
     <AppBar position="static">
@@ -138,7 +158,6 @@ function ResponsiveAppBar({ toggleTheme }) {
             variant="h6"
             noWrap
             component="a"
-            href="/"
             sx={{
               mr: 2,
               display: { xs: "none", md: "flex" },
@@ -147,11 +166,12 @@ function ResponsiveAppBar({ toggleTheme }) {
               letterSpacing: ".3rem",
               color: "inherit",
               textDecoration: "none",
+              cursor: "pointer",
             }}
+            onClick={() => router.push("/")}
           >
             Movies
           </Typography>
-
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
@@ -182,8 +202,11 @@ function ResponsiveAppBar({ toggleTheme }) {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
+                <MenuItem
+                  key={page.name}
+                  onClick={() => handleCloseNavMenu(page.link)}
+                >
+                  <Typography textAlign="center">{page.name}</Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -191,23 +214,26 @@ function ResponsiveAppBar({ toggleTheme }) {
           <LocalMoviesIcon
             sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}
           />
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ "aria-label": "search" }}
-            />
-          </Search>
+          {rout ? (
+            <Search>
+              <SearchIconWrapper>
+                <SearchIcon />
+              </SearchIconWrapper>
+              <StyledInputBase
+                placeholder="Search…"
+                inputProps={{ "aria-label": "search" }}
+                onKeyDown={onSearch}
+              />
+            </Search>
+          ) : null}
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
               <Button
-                key={page}
-                onClick={handleCloseNavMenu}
+                key={page.name}
+                onClick={() => handleCloseNavMenu(page.link)}
                 sx={{ my: 2, color: "white", display: "block" }}
               >
-                {page}
+                {page.name}
               </Button>
             ))}
           </Box>
