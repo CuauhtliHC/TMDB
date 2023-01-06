@@ -22,12 +22,17 @@ function CircularProgressWithLabel({ value }) {
   });
 
   return (
-    <Box sx={{ position: "relative", display: "inline-flex" }}>
+    <Box
+      sx={{ position: "relative", display: "inline-flex" }}
+      bgcolor="black"
+      borderRadius={"50%"}
+    >
       <ThemeProvider theme={theme}>
         <CircularProgress
           color={value > 40 ? "primary" : "secondary"}
           variant="determinate"
           value={value}
+          sx={{ padding: "3px" }}
         />
       </ThemeProvider>
       <Box
@@ -42,7 +47,7 @@ function CircularProgressWithLabel({ value }) {
           justifyContent: "center",
         }}
       >
-        <Typography variant="caption" component="div" color="text.secondary">
+        <Typography variant="caption" component="div" color="white">
           {Math.round(value) === 0 ? `NaN` : `${Math.round(value)}%`}
         </Typography>
       </Box>
