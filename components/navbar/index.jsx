@@ -19,13 +19,17 @@ import { useState } from "react";
 import { styled, alpha } from "@mui/material/styles";
 import SearchIcon from "@mui/icons-material/Search";
 import { useRouter } from "next/router";
+import { useAuthContext } from "../../store/user";
 
 const pages = [
   { name: "Movies", link: "/movies?page=1" },
   { name: "TvShows", link: "/tvshow" },
   { name: "Users", link: "/users" },
 ];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+const settings = [
+  { name: "Favoritos", link: "/myFavorites" },
+  { name: "Cerrar Sesion", link: "/logout" },
+];
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -114,6 +118,7 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
 }));
 
 function ResponsiveAppBar({ toggleTheme }) {
+  const { user } = useAuthContext();
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const router = useRouter();
@@ -242,35 +247,55 @@ function ResponsiveAppBar({ toggleTheme }) {
             defaultChecked
             onClick={toggleTheme}
           />
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar>C</Avatar>
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: "45px" }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
+          {user ? (
+            <Box sx={{ flexGrow: 0 }}>
+              <Tooltip title="Open settings">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar
+                    alt={user.displayName.slice(0, 1)}
+                    src={user.photoURL}
+                  />
+                </IconButton>
+              </Tooltip>
+              <Menu
+                sx={{ mt: "45px" }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                {settings.map((setting, i) => (
+                  <MenuItem key={i} onClick={handleCloseUserMenu}>
+                    <Typography textAlign="center">{setting.name}</Typography>
+                  </MenuItem>
+                ))}
+              </Menu>
+            </Box>
+          ) : (
+            <Box>
+              <Button
+                onClick={() => router.push("/login")}
+                sx={{ my: 2, color: "white" }}
+              >
+                Iniciar Sesion
+              </Button>
+              <Button
+                onClick={() => router.push("/signup")}
+                sx={{ my: 2, color: "white" }}
+              >
+                Registrarse
+              </Button>
+            </Box>
+          )}
         </Toolbar>
       </Container>
     </AppBar>

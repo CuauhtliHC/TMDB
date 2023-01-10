@@ -13,11 +13,12 @@ const Footer = () => {
           theme.palette.mode === "light"
             ? theme.palette.primary.main
             : `#ffffff17`,
+        marginTop: "calc(10% + 60px)",
+        width: "100%",
+        bottom: 0,
       }}
       alignContent="center"
       alignItems="center"
-      pb={{ xs: 5 }}
-      mt={10}
     >
       <Box
         alignItems="center"

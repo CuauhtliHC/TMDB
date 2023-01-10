@@ -31,7 +31,6 @@ export default function MediaCardCast({ cast }) {
           left: 0,
           display: "flex",
           alignContent: "flex-start",
-          cursor: "pointer",
         }}
       />
       <CardContent>
@@ -41,7 +40,6 @@ export default function MediaCardCast({ cast }) {
           component="div"
           fontSize="1em"
           fontWeight={700}
-          sx={{ cursor: "pointer" }}
         >
           {cast.character}
         </Typography>
