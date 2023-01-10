@@ -13,13 +13,19 @@ import {
 } from "@mui/material";
 import Head from "next/head";
 import LoginWithSocial from "../commons/login/LoginWithSocial";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  getAuth,
+  updateProfile,
+  signOut,
+} from "firebase/auth";
 import { useState } from "react";
 import { auth } from "../firebase/client";
-import authentic from "firebase/auth";
 import CloseIcon from "@mui/icons-material/Close";
 
 const SignUP = () => {
+  const authentic = getAuth();
   const [name, setName] = useState(null);
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
@@ -30,8 +36,19 @@ const SignUP = () => {
     setOpen(false);
     setMessage(false);
     createUserWithEmailAndPassword(auth, email, password)
-      .then((result) => {
-        console.log(result);
+      .then(() => {
+        signInWithEmailAndPassword(auth, email, password).then(() => {
+          updateProfile(authentic.currentUser, {
+            displayName: name,
+          })
+            .then(() => {
+              signOut(authentic).then(() => {
+                setMessage("Registro se a realizado correctamente!");
+                setOpen(true);
+              });
+            })
+            .catch((err) => console.error(err));
+        });
       })
       .catch((err) => {
         if (err.code === "auth/invalid-email") setMessage("Correo Invalido!");
@@ -69,9 +86,17 @@ const SignUP = () => {
                 </IconButton>
               }
               sx={{ mb: 2 }}
-              severity="error"
+              severity={
+                message !== "Registro se a realizado correctamente!"
+                  ? "error"
+                  : "success"
+              }
             >
-              <AlertTitle>Error</AlertTitle>
+              <AlertTitle>
+                {message !== "Registro se a realizado correctamente!"
+                  ? "Error"
+                  : "Exito"}
+              </AlertTitle>
               {message}
             </Alert>
           </Collapse>

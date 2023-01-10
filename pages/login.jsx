@@ -8,9 +8,26 @@ import {
   InputLabel,
 } from "@mui/material";
 import Head from "next/head";
+import { useState } from "react";
 import LoginWithSocial from "../commons/login/LoginWithSocial";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase/client";
+import { useAuthContext } from "../store/user";
+import { useRouter } from "next/router";
 
 const Login = () => {
+  const [email, setEmail] = useState(null);
+  const [password, setPassword] = useState(null);
+  const { setUser } = useAuthContext();
+  const router = useRouter();
+
+  const loginUser = () => {
+    signInWithEmailAndPassword(auth, email, password).then((result) => {
+      setUser(result.user);
+      router.push("/");
+    });
+  };
+
   return (
     <>
       <Head>
@@ -23,7 +40,12 @@ const Login = () => {
           <Box pt={1}>
             <FormControl>
               <InputLabel htmlFor="email">Correo Electronico</InputLabel>
-              <Input id="email" type="email" aria-describedby="email-helper" />
+              <Input
+                id="email"
+                type="email"
+                aria-describedby="email-helper"
+                onChange={(e) => setEmail(e.target.value)}
+              />
               <FormHelperText id="email-helper">
                 Ingrese su correo electronico
               </FormHelperText>
@@ -36,6 +58,7 @@ const Login = () => {
                 id="password"
                 type="password"
                 aria-describedby="password-helper"
+                onChange={(e) => setPassword(e.target.value)}
               />
               <FormHelperText id="password-helper">
                 Ingrese su contraseña
@@ -43,7 +66,9 @@ const Login = () => {
             </FormControl>
           </Box>
           <Box pt={3}>
-            <Button vartian="contained">Iniciar Sesion</Button>
+            <Button vartian="contained" onClick={loginUser}>
+              Iniciar Sesion
+            </Button>
           </Box>
           <LoginWithSocial />
         </FormGroup>

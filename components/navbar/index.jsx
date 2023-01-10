@@ -20,6 +20,8 @@ import { styled, alpha } from "@mui/material/styles";
 import SearchIcon from "@mui/icons-material/Search";
 import { useRouter } from "next/router";
 import { useAuthContext } from "../../store/user";
+import { auth } from "../../firebase/client";
+import { getAuth, signOut } from "firebase/auth";
 
 const pages = [
   { name: "Movies", link: "/movies?page=1" },
@@ -118,10 +120,11 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
 }));
 
 function ResponsiveAppBar({ toggleTheme }) {
-  const { user } = useAuthContext();
+  const { user, setUser } = useAuthContext();
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const router = useRouter();
+  const authentic = getAuth();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -135,8 +138,14 @@ function ResponsiveAppBar({ toggleTheme }) {
     setAnchorElNav(null);
   };
 
-  const handleCloseUserMenu = () => {
+  const handleCloseUserMenu = (setting) => {
     setAnchorElUser(null);
+    if (setting.name === "Cerrar Sesion") {
+      signOut(authentic).then(() => {
+        setUser(null);
+        router.push("/");
+      });
+    }
   };
 
   const onSearch = (event) => {
@@ -274,7 +283,10 @@ function ResponsiveAppBar({ toggleTheme }) {
                 onClose={handleCloseUserMenu}
               >
                 {settings.map((setting, i) => (
-                  <MenuItem key={i} onClick={handleCloseUserMenu}>
+                  <MenuItem
+                    key={i}
+                    onClick={() => handleCloseUserMenu(setting)}
+                  >
                     <Typography textAlign="center">{setting.name}</Typography>
                   </MenuItem>
                 ))}
