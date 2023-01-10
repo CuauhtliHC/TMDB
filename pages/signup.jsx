@@ -6,10 +6,6 @@ import {
   Input,
   InputLabel,
   Box,
-  Collapse,
-  Alert,
-  IconButton,
-  AlertTitle,
 } from "@mui/material";
 import Head from "next/head";
 import LoginWithSocial from "../commons/login/LoginWithSocial";
@@ -22,7 +18,8 @@ import {
 } from "firebase/auth";
 import { useState } from "react";
 import { auth } from "../firebase/client";
-import CloseIcon from "@mui/icons-material/Close";
+
+import AlertFirebase from "../commons/alerts/AlertFirebase";
 
 const SignUP = () => {
   const authentic = getAuth();
@@ -56,6 +53,8 @@ const SignUP = () => {
           setMessage("Contraseña demasiado debil");
         else if (err.code === "auth/email-already-in-use")
           setMessage("Este correo ya esta en uso");
+        else if (err.code === "auth/account-exists-with-different-credential")
+          setMessage("Este correo ya esta registrado con otras credenciales");
         else if (err.code) setMessage("A ocurrido un error");
         setOpen(true);
         console.log(err);
@@ -71,35 +70,7 @@ const SignUP = () => {
       </Head>
       <Box pt={2}>
         <FormGroup sx={{ alignItems: "center", alignContent: "center" }}>
-          <Collapse in={open}>
-            <Alert
-              action={
-                <IconButton
-                  aria-label="close"
-                  color="inherit"
-                  size="small"
-                  onClick={() => {
-                    setOpen(false);
-                  }}
-                >
-                  <CloseIcon fontSize="inherit" />
-                </IconButton>
-              }
-              sx={{ mb: 2 }}
-              severity={
-                message !== "Registro se a realizado correctamente!"
-                  ? "error"
-                  : "success"
-              }
-            >
-              <AlertTitle>
-                {message !== "Registro se a realizado correctamente!"
-                  ? "Error"
-                  : "Exito"}
-              </AlertTitle>
-              {message}
-            </Alert>
-          </Collapse>
+          <AlertFirebase open={open} message={message} setOpen={setOpen} />
           <Box pt={1}>
             <FormControl>
               <InputLabel htmlFor="name">Nombre</InputLabel>
@@ -147,7 +118,7 @@ const SignUP = () => {
               Registrarse
             </Button>
           </Box>
-          <LoginWithSocial />
+          <LoginWithSocial setOpen={setOpen} setMessage={setMessage} />
         </FormGroup>
       </Box>
     </>

@@ -3,17 +3,31 @@ import GitHubIcon from "@mui/icons-material/GitHub";
 import { GithubAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../../firebase/client";
 import { useAuthContext } from "../../store/user";
+import { useRouter } from "next/router";
 
-const LoginWithSocial = () => {
-  const { user, setUser } = useAuthContext();
+const LoginWithSocial = ({ setMessage, setOpen }) => {
+  const router = useRouter();
+  const { setUser } = useAuthContext();
   const handleClick = () => {
     const provider = new GithubAuthProvider();
     signInWithPopup(auth, provider)
       .then((credentials) => {
-        console.log(credentials);
         setUser(credentials.user);
+        router.push("/");
       })
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        if (err.code === "auth/invalid-email") setMessage("Correo Invalido!");
+        else if (err.code === "auth/weak-password")
+          setMessage("Contraseña demasiado debil");
+        else if (err.code === "auth/email-already-in-use")
+          setMessage("Este correo ya esta en uso");
+        else if (err.code === "auth/account-exists-with-different-credential")
+          setMessage("Este correo ya esta registrado con otras credenciales");
+        else if (err.code) setMessage("A ocurrido un error");
+
+        setOpen(true);
+        console.log(err);
+      });
   };
   return (
     <Stack flexDirection="colum" alignContent="center" alignItems="center">
