@@ -143,10 +143,15 @@ function ResponsiveAppBar({ toggleTheme }) {
     if (setting.name === "Cerrar Sesion") {
       signOut(authentic).then(() => {
         setUser(null);
+        localStorage.removeItem("user");
         router.push("/");
       });
-    }
+    } else if (setting.name === "Favoritos")
+      router.push(
+        `/users/${user.email.substring(0, user.email.indexOf("@"))}/favorites`
+      );
   };
+  console.log(user);
 
   const onSearch = (event) => {
     if (event.key === "Enter") {

@@ -1,11 +1,16 @@
-import * as React from "react";
+import { createContext, useState, useContext, useEffect } from "react";
 
-const AuthContext = React.createContext();
+const AuthContext = createContext();
 
 const DEFAULT_USER = null;
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = React.useState(DEFAULT_USER);
+  const [user, setUser] = useState(DEFAULT_USER);
+
+  useEffect(() => {
+    const dataUser = JSON.parse(localStorage.getItem("user")) ?? null;
+    setUser(dataUser);
+  }, []);
 
   return (
     <AuthContext.Provider value={{ user, setUser }}>
@@ -15,5 +20,5 @@ export const AuthProvider = ({ children }) => {
 };
 
 export const useAuthContext = () => {
-  return React.useContext(AuthContext);
+  return useContext(AuthContext);
 };

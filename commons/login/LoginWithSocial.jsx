@@ -13,6 +13,7 @@ const LoginWithSocial = ({ setMessage, setOpen }) => {
     signInWithPopup(auth, provider)
       .then((credentials) => {
         setUser(credentials.user);
+        localStorage.setItem("user", JSON.stringify(credentials.user));
         router.push("/");
       })
       .catch((err) => {

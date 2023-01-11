@@ -28,6 +28,7 @@ const Login = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then((result) => {
         setUser(result.user);
+        localStorage.setItem("user", JSON.stringify(credentials.user));
         router.push("/");
       })
       .catch((err) => (err) => {
