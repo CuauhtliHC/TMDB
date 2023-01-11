@@ -28,6 +28,7 @@ yarn-error.log*
 # local env files
 .env*.local
 .env
+tmdb-b6b20-firebase-adminsdk-3741q-23771f0ecf.json
 
 # vercel
 .vercel

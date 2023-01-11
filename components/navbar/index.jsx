@@ -151,7 +151,6 @@ function ResponsiveAppBar({ toggleTheme }) {
         `/users/${user.email.substring(0, user.email.indexOf("@"))}/favorites`
       );
   };
-  console.log(user);
 
   const onSearch = (event) => {
     if (event.key === "Enter") {

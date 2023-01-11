@@ -1,7 +1,9 @@
 import { Box } from "@mui/material";
+import auth from "firebase/auth";
 import Head from "next/head";
 
-const Favorites = () => {
+const Favorites = ({ users }) => {
+  console.log(auth);
   return (
     <>
       <Head>
@@ -15,3 +17,12 @@ const Favorites = () => {
 };
 
 export default Favorites;
+
+export async function getServerSideProps() {
+  console.log(auth);
+  return {
+    props: {
+      users: "users.users,",
+    },
+  };
+}
