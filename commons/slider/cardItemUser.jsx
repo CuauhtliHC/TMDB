@@ -1,17 +1,9 @@
 import { Card, CardContent, CardMedia, Typography } from "@mui/material";
-import PropTypes from "prop-types";
 import { useRouter } from "next/router";
-import CircularProgressWithLabel from "./Rating";
 
-export default function MediaCard({ movie, url }) {
+export default function MediaCardUser({ user }) {
   const router = useRouter();
-  const date = new Date(
-    movie.release_date ? movie.release_date : movie.first_air_date
-  );
-  const day = date.getDate();
-  const month = date.toLocaleString("default", { month: "short" });
-  const year = date.getFullYear();
-
+  console.log(user);
   return (
     <Card
       sx={{
@@ -30,8 +22,7 @@ export default function MediaCard({ movie, url }) {
         component="img"
         height="100%"
         width="100%"
-        image={`https://image.tmdb.org/t/p/w220_and_h330_face${movie.poster_path}`}
-        alt={movie.title ? movie.title : movie.name}
+        image={user.photoURL ? user.photoURL : "/img/blank-profile.png"}
         sx={{
           borderRadius: 2,
           position: "relative",
@@ -43,12 +34,14 @@ export default function MediaCard({ movie, url }) {
         }}
         onClick={() =>
           router.push(
-            url ? `/${url}/${movie.id}` : `/${movie.type}/${movie.id}`
+            `/users/${user.email.substring(
+              0,
+              user.email.indexOf("@")
+            )}/favorites`
           )
         }
       />
       <CardContent>
-        <CircularProgressWithLabel value={movie.vote_average * 10} />
         <Typography
           gutterBottom
           variant="h5"
@@ -57,26 +50,17 @@ export default function MediaCard({ movie, url }) {
           fontWeight={700}
           onClick={() =>
             router.push(
-              url ? `/${url}/${movie.id}` : `/${movie.type}/${movie.id}`
+              `/users/${user.email.substring(
+                0,
+                user.email.indexOf("@")
+              )}/favorites`
             )
           }
           sx={{ cursor: "pointer" }}
         >
-          {movie.title ? movie.title : movie.name}
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          {`${day} ${month} ${year}`}
+          {user.displayName}
         </Typography>
       </CardContent>
     </Card>
   );
 }
-
-CircularProgressWithLabel.propTypes = {
-  /**
-   * The value of the progress indicator for the determinate variant.
-   * Value between 0 and 100.
-   * @default 0
-   */
-  value: PropTypes.number.isRequired,
-};

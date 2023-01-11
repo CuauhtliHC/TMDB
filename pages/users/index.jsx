@@ -1,9 +1,9 @@
 import { Box } from "@mui/material";
-import auth from "firebase/auth";
 import Head from "next/head";
+import ListItemsUsers from "../../components/list/users";
 
 const Favorites = ({ users }) => {
-  console.log(auth);
+  console.log(users);
   return (
     <>
       <Head>
@@ -11,7 +11,9 @@ const Favorites = ({ users }) => {
         <meta name="description" content="Web app to check movies" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Box>Hola</Box>
+      <Box>
+        <ListItemsUsers users={users} />
+      </Box>
     </>
   );
 };
@@ -19,10 +21,15 @@ const Favorites = ({ users }) => {
 export default Favorites;
 
 export async function getServerSideProps() {
-  console.log(auth);
+  const users = new Array(20).fill({
+    displayName: "Cuau",
+    photoURL: "https://avatars.githubusercontent.com/u/50902390?v=4",
+    email: "cuau_daali@hotmail.com",
+  });
+
   return {
     props: {
-      users: "users.users,",
+      users: users,
     },
   };
 }
