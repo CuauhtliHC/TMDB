@@ -10,8 +10,7 @@ import {
 import Head from "next/head";
 import { useState } from "react";
 import LoginWithSocial from "../commons/login/LoginWithSocial";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase/client";
+import { login } from "../firebase/client";
 import { useAuthContext } from "../store/user";
 import { useRouter } from "next/router";
 import AlertFirebase from "../commons/alerts/AlertFirebase";
@@ -25,13 +24,15 @@ const Login = () => {
   const [message, setMessage] = useState(false);
 
   const loginUser = () => {
-    signInWithEmailAndPassword(auth, email, password)
+    setOpen(false);
+    setMessage(false);
+    login(email, password)
       .then((result) => {
         setUser(result.user);
-        localStorage.setItem("user", JSON.stringify(credentials.user));
+        localStorage.setItem("user", JSON.stringify(result.user));
         router.push("/");
       })
-      .catch((err) => (err) => {
+      .catch((err) => {
         if (err.code === "auth/invalid-email") setMessage("Correo Invalido!");
         else if (err.code === "auth/weak-password")
           setMessage("Contraseña demasiado debil");
@@ -39,6 +40,8 @@ const Login = () => {
           setMessage("Este correo ya esta en uso");
         else if (err.code === "auth/account-exists-with-different-credential")
           setMessage("Este correo ya esta registrado con otras credenciales");
+        else if (err.code === "auth/wrong-password")
+          setMessage("Contraseña incorrecta!");
         else if (err.code) setMessage("A ocurrido un error");
 
         setOpen(true);

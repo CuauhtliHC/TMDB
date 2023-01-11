@@ -9,20 +9,11 @@ import {
 } from "@mui/material";
 import Head from "next/head";
 import LoginWithSocial from "../commons/login/LoginWithSocial";
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  getAuth,
-  updateProfile,
-  signOut,
-} from "firebase/auth";
 import { useState } from "react";
-import { auth } from "../firebase/client";
-
+import { login, signOutUser, signup, updateUser } from "../firebase/client";
 import AlertFirebase from "../commons/alerts/AlertFirebase";
 
 const SignUP = () => {
-  const authentic = getAuth();
   const [name, setName] = useState(null);
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
@@ -32,14 +23,12 @@ const SignUP = () => {
   const createUser = () => {
     setOpen(false);
     setMessage(false);
-    createUserWithEmailAndPassword(auth, email, password)
+    signup(email, password)
       .then(() => {
-        signInWithEmailAndPassword(auth, email, password).then(() => {
-          updateProfile(authentic.currentUser, {
-            displayName: name,
-          })
+        login(email, password).then(() => {
+          updateUser(name)
             .then(() => {
-              signOut(authentic).then(() => {
+              signOutUser().then(() => {
                 setMessage("Registro se a realizado correctamente!");
                 setOpen(true);
               });

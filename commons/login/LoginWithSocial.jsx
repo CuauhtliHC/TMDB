@@ -1,7 +1,6 @@
 import { Box, Button, Stack } from "@mui/material";
 import GitHubIcon from "@mui/icons-material/GitHub";
-import { GithubAuthProvider, signInWithPopup } from "firebase/auth";
-import { auth } from "../../firebase/client";
+import { loginGitHub } from "../../firebase/client";
 import { useAuthContext } from "../../store/user";
 import { useRouter } from "next/router";
 
@@ -9,8 +8,7 @@ const LoginWithSocial = ({ setMessage, setOpen }) => {
   const router = useRouter();
   const { setUser } = useAuthContext();
   const handleClick = () => {
-    const provider = new GithubAuthProvider();
-    signInWithPopup(auth, provider)
+    loginGitHub()
       .then((credentials) => {
         setUser(credentials.user);
         localStorage.setItem("user", JSON.stringify(credentials.user));

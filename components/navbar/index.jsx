@@ -20,8 +20,7 @@ import { styled, alpha } from "@mui/material/styles";
 import SearchIcon from "@mui/icons-material/Search";
 import { useRouter } from "next/router";
 import { useAuthContext } from "../../store/user";
-import { auth } from "../../firebase/client";
-import { getAuth, signOut } from "firebase/auth";
+import { signOutUser } from "../../firebase/client";
 
 const pages = [
   { name: "Movies", link: "/movies?page=1" },
@@ -124,7 +123,6 @@ function ResponsiveAppBar({ toggleTheme }) {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const router = useRouter();
-  const authentic = getAuth();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -141,7 +139,7 @@ function ResponsiveAppBar({ toggleTheme }) {
   const handleCloseUserMenu = (setting) => {
     setAnchorElUser(null);
     if (setting.name === "Cerrar Sesion") {
-      signOut(authentic).then(() => {
+      signOutUser().then(() => {
         setUser(null);
         localStorage.removeItem("user");
         router.push("/");

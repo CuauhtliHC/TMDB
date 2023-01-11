@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, signOut, GithubAuthProvider, signInWithPopup } from "firebase/auth";
 
 const firebaseConfig = {
     apiKey: "AIzaSyD6H4FRJhDpY7eWlZD2QtNdNPZ2GbdXzhI",
@@ -11,5 +11,14 @@ const firebaseConfig = {
     measurementId: "G-7B9Z7N2SNM"
   };
 
+const provider = new GithubAuthProvider();
+
 export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app)
+export const login = async (email, password) => await signInWithEmailAndPassword(auth, email, password)
+export const signup = async (email, password) => await createUserWithEmailAndPassword(auth, email, password)
+export const updateUser = async (name) => await updateProfile(auth.currentUser, {
+  displayName: name,
+})
+export const signOutUser = async () => await signOut(auth)
+export const loginGitHub = async () => await signInWithPopup(auth, provider)
