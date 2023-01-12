@@ -145,11 +145,8 @@ function ResponsiveAppBar({ toggleTheme }) {
         router.push("/");
       });
     } else if (setting.name === "Favoritos")
-      router.push(
-        `/users/${user.email.substring(0, user.email.indexOf("@"))}/favorites`
-      );
+      router.push(`/users/${user.uid}/favorites`);
   };
-
   const onSearch = (event) => {
     if (event.key === "Enter") {
       if (event.target.value !== "") {

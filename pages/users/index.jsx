@@ -1,9 +1,9 @@
 import { Box } from "@mui/material";
+import fetch from "isomorphic-fetch";
 import Head from "next/head";
 import ListItemsUsers from "../../components/list/users";
 
 const Favorites = ({ users }) => {
-  console.log(users);
   return (
     <>
       <Head>
@@ -21,15 +21,11 @@ const Favorites = ({ users }) => {
 export default Favorites;
 
 export async function getServerSideProps() {
-  const users = new Array(20).fill({
-    displayName: "Cuau",
-    photoURL: "https://avatars.githubusercontent.com/u/50902390?v=4",
-    email: "cuau_daali@hotmail.com",
-  });
-
+  const users = await fetch("http://localhost:3000/api/entry");
+  const dataUsers = await users.json();
   return {
     props: {
-      users: users,
+      users: dataUsers.users,
     },
   };
 }

@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 
 export default function MediaCardUser({ user }) {
   const router = useRouter();
-  console.log(user);
   return (
     <Card
       sx={{
@@ -32,14 +31,7 @@ export default function MediaCardUser({ user }) {
           alignContent: "flex-start",
           cursor: "pointer",
         }}
-        onClick={() =>
-          router.push(
-            `/users/${user.email.substring(
-              0,
-              user.email.indexOf("@")
-            )}/favorites`
-          )
-        }
+        onClick={() => router.push(`/users/${user.uid}/favorites`)}
       />
       <CardContent>
         <Typography
@@ -48,14 +40,7 @@ export default function MediaCardUser({ user }) {
           component="div"
           fontSize="1em"
           fontWeight={700}
-          onClick={() =>
-            router.push(
-              `/users/${user.email.substring(
-                0,
-                user.email.indexOf("@")
-              )}/favorites`
-            )
-          }
+          onClick={() => router.push(`/users/${user.uid}/favorites`)}
           sx={{ cursor: "pointer" }}
         >
           {user.displayName}
