@@ -25,7 +25,7 @@ import { signOutUser } from "../../firebase/client";
 const pages = [
   { name: "Movies", link: "/movies?page=1" },
   { name: "TvShows", link: "/tvshow" },
-  { name: "Users", link: "/users" },
+  { name: "Users", link: "/users?page=1" },
 ];
 const settings = [
   { name: "Favoritos", link: "/myFavorites" },
