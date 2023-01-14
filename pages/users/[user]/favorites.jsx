@@ -1,8 +1,9 @@
 import { Box } from "@mui/material";
+import fetch from "isomorphic-fetch";
 import Head from "next/head";
 import ListItems from "../../../components/list";
 
-const Favorites = ({ fav }) => {
+const Favorites = ({ fav, favorites }) => {
   return (
     <>
       <Head>
@@ -19,7 +20,12 @@ const Favorites = ({ fav }) => {
 
 export default Favorites;
 
-export async function getServerSideProps() {
+export async function getServerSideProps({ query }) {
+  const favorites = await fetch(
+    `http://localhost:3000/api/favorites/byUser/${query.user}`
+  );
+  const dataFav = await favorites.json();
+
   const fav = new Array(20).fill({
     release_date: "2009-10-10",
     title: "Avatar: The Way of Water",
@@ -31,7 +37,7 @@ export async function getServerSideProps() {
 
   return {
     props: {
-      fav: { results: fav, total_pages: 10 },
+      fav: { results: dataFav, total_pages: 10 },
     },
   };
 }

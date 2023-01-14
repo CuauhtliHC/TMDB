@@ -3,6 +3,7 @@ import GitHubIcon from "@mui/icons-material/GitHub";
 import { loginGitHub } from "../../firebase/client";
 import { useAuthContext } from "../../store/user";
 import { useRouter } from "next/router";
+import axios from "axios";
 
 const LoginWithSocial = ({ setMessage, setOpen }) => {
   const router = useRouter();
@@ -10,9 +11,24 @@ const LoginWithSocial = ({ setMessage, setOpen }) => {
   const handleClick = () => {
     loginGitHub()
       .then((credentials) => {
-        setUser(credentials.user);
-        localStorage.setItem("user", JSON.stringify(credentials.user));
-        router.push("/");
+        const { displayName, email, photoURL, uid } = credentials.user;
+        axios
+          .get(`/api/favorites/byUserOnlyId/${uid}`)
+          .then((res) => {
+            setUser({ displayName, email, photoURL, uid, data: res.data });
+            localStorage.setItem(
+              "user",
+              JSON.stringify({
+                displayName,
+                email,
+                photoURL,
+                uid,
+                data: res.data,
+              })
+            );
+            router.push("/");
+          })
+          .catch((err) => console.error(err));
       })
       .catch((err) => {
         if (err.code === "auth/invalid-email") setMessage("Correo Invalido!");

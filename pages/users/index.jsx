@@ -6,7 +6,6 @@ import { useRouter } from "next/router";
 
 const Favorites = ({ result, search }) => {
   const router = useRouter();
-  console.log(result);
   const changePage = (e, num) => {
     if (search) {
       router.push(`/users?page=${num}&search=${search}`);

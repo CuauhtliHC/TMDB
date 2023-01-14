@@ -4,6 +4,7 @@ import MediaCardVideo from "../../commons/slider/cardItemVideo";
 import CircularProgressWithLabel from "../../commons/slider/Rating";
 
 const IndvidualVist = ({ data, credits, videos }) => {
+  console.log(data);
   const { results } = videos;
   return (
     <>

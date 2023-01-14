@@ -26,6 +26,7 @@ function CircularProgressWithLabel({ value }) {
       sx={{ position: "relative", display: "inline-flex" }}
       bgcolor="black"
       borderRadius={"50%"}
+      mr={4.5}
     >
       <ThemeProvider theme={theme}>
         <CircularProgress

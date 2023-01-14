@@ -27,10 +27,25 @@ const Login = () => {
     setOpen(false);
     setMessage(false);
     login(email, password)
-      .then((result) => {
-        setUser(result.user);
-        localStorage.setItem("user", JSON.stringify(result.user));
-        router.push("/");
+      .then((credentials) => {
+        const { displayName, email, photoURL, uid } = credentials.user;
+        axios
+          .get(`/api/favorites/byUserOnlyId/${uid}`)
+          .then((res) => {
+            setUser({ displayName, email, photoURL, uid, data: res.data });
+            localStorage.setItem(
+              "user",
+              JSON.stringify({
+                displayName,
+                email,
+                photoURL,
+                uid,
+                data: res.data,
+              })
+            );
+            router.push("/");
+          })
+          .catch((err) => console.error(err));
       })
       .catch((err) => {
         if (err.code === "auth/invalid-email") setMessage("Correo Invalido!");

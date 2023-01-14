@@ -7,7 +7,7 @@ const DetailTvShow = ({ tvshow, credits, videos }) => {
   return (
     <>
       <Head>
-        <title>{tvshow.title}</title>
+        <title>{tvshow.name}</title>
         <meta name="description" content="Web app to check movies" />
         <link rel="icon" href="/favicon.ico" />
       </Head>

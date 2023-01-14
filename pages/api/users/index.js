@@ -1,12 +1,12 @@
-import db from "../../../utils/db"; //Firebase-admin inicializado
+import db from "../../../utils/db";
 
 export default async (req, res) => {
-  const { page } = req.query; //Pagina a la que quiero ir
-  const limit = 20; //Limite de items a mostrar
+  const { page } = req.query;
+  const limit = 20;
   try {
-    const users = await getUsers(limit, page); //Funcion para traer los usuarios
-    const totalResult = await countUsers(); //Funcion para saber cuantos usuarios hay en total
-    const pages = totalPage(limit, totalResult); // Funcion para saber cuantas paginas hay en total
+    const users = await getUsers(limit, page);
+    const totalResult = await countUsers();
+    const pages = totalPage(limit, totalResult);
     res
       .status(200)
       .json({ users: users, totalResult: totalResult, pages: pages });
@@ -16,33 +16,29 @@ export default async (req, res) => {
   }
 };
 
-//Funcion para saber cuantos usuarios hay en total
 const countUsers = async () => {
   let totalUsers = 0;
-  const result = await db.listUsers();
+  const result = await db.auth().listUsers();
   totalUsers = result.users.length;
   return totalUsers;
 };
 
-// Funcion para saber cuantas paginas hay en total
 const totalPage = (limit, totalResult) => {
   if (totalResult < limit) return 1;
   return Math.ceil(totalResult / limit);
 };
 
-//Funcion para traer los usuarios
 const getUsers = async (limit, page) => {
-  let pageToken; //En esta variable se guarda el token para pasar a la siguiente pagina
-  let users = []; //Variable para guardar datos de los usuarios
+  let pageToken;
+  let users = [];
   for (let i = 0; i < page; i++) {
-    //Loop para recorrer todos los usuarios
-    const listUsersResult = await db.listUsers(limit, pageToken);
+    const listUsersResult = await db.auth().listUsers(limit, pageToken);
     pageToken = listUsersResult.pageToken;
     const listUsers = listUsersResult.users.map((user) => {
       return {
         uid: user.uid,
         email: user.email,
-        diplayName: user.diplayName,
+        displayName: user.displayName,
         photoURL: user.photoURL,
       };
     });

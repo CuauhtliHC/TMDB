@@ -1,9 +1,20 @@
-import { Card, CardContent, CardMedia, Typography } from "@mui/material";
+import {
+  Card,
+  CardContent,
+  CardMedia,
+  IconButton,
+  Typography,
+} from "@mui/material";
 import PropTypes from "prop-types";
 import { useRouter } from "next/router";
 import CircularProgressWithLabel from "./Rating";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import { useAuthContext } from "../../store/user";
+import axios from "axios";
 
 export default function MediaCard({ movie, url }) {
+  const { user } = useAuthContext();
   const router = useRouter();
   const date = new Date(
     movie.release_date ? movie.release_date : movie.first_air_date
@@ -11,6 +22,23 @@ export default function MediaCard({ movie, url }) {
   const day = date.getDate();
   const month = date.toLocaleString("default", { month: "short" });
   const year = date.getFullYear();
+  const matchId = user.data.some((element) => element === movie.id);
+
+  const addOrRemoveFav = () => {
+    axios
+      .post(`/api/favorites/add/${user.uid}`, {
+        id: movie.id,
+        title: movie.title,
+        poster_path: movie.poster_path,
+        type: url,
+        release_date: movie.release_date,
+        vote_average: movie.vote_average,
+        first_air_date: movie.first_air_date,
+        name: movie.name,
+      })
+      .then((res) => console.log(res))
+      .catch((err) => console.error(err));
+  };
 
   return (
     <Card
@@ -49,6 +77,11 @@ export default function MediaCard({ movie, url }) {
       />
       <CardContent>
         <CircularProgressWithLabel value={movie.vote_average * 10} />
+        {user ? (
+          <IconButton onClick={addOrRemoveFav}>
+            {matchId ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+          </IconButton>
+        ) : null}
         <Typography
           gutterBottom
           variant="h5"
