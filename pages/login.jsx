@@ -18,7 +18,7 @@ import AlertFirebase from "../commons/alerts/AlertFirebase";
 const Login = () => {
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
-  const { setUser } = useAuthContext();
+  const { setUser, setData } = useAuthContext();
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState(false);
@@ -43,6 +43,8 @@ const Login = () => {
                 data: res.data,
               })
             );
+            setData({ fav: res.data });
+            localStorage.setItem("data", JSON.stringify({ fav: res.data }));
             router.push("/");
           })
           .catch((err) => console.error(err));

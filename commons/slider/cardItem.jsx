@@ -14,7 +14,7 @@ import { useAuthContext } from "../../store/user";
 import axios from "axios";
 
 export default function MediaCard({ movie, url }) {
-  const { user } = useAuthContext();
+  const { user, data } = useAuthContext();
   const router = useRouter();
   const date = new Date(
     movie.release_date ? movie.release_date : movie.first_air_date
@@ -22,7 +22,6 @@ export default function MediaCard({ movie, url }) {
   const day = date.getDate();
   const month = date.toLocaleString("default", { month: "short" });
   const year = date.getFullYear();
-  const matchId = user.data.some((element) => element === movie.id);
 
   const addOrRemoveFav = () => {
     axios
@@ -79,7 +78,11 @@ export default function MediaCard({ movie, url }) {
         <CircularProgressWithLabel value={movie.vote_average * 10} />
         {user ? (
           <IconButton onClick={addOrRemoveFav}>
-            {matchId ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+            {data.fav.some((element) => element === movie.id) ? (
+              <FavoriteIcon />
+            ) : (
+              <FavoriteBorderIcon />
+            )}
           </IconButton>
         ) : null}
         <Typography

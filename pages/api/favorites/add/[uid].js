@@ -1,7 +1,4 @@
-import db from "../../../../utils/db";
-
-const firestore = db.firestore();
-firestore.settings({ ignoreUndefinedProperties: true });
+import firestore from "../../../../utils/db/firestore";
 
 export default async (req, res) => {
   const { uid } = req.query;
