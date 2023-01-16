@@ -12,14 +12,14 @@ const ListItems = ({ movies, changePage, url }) => {
         ))}
       </Grid>
       <Stack direction="row" justifyContent="center" alignItems="center" pt={5}>
-        {movies.total_pages === 1 ? null : (
+        {movies.total_pages > 1 ? (
           <Pagination
             count={movies.total_pages < 500 ? movies.total_pages : 500}
             showFirstButton
             showLastButton
             onChange={changePage}
           />
-        )}
+        ) : null}
       </Stack>
     </Box>
   );

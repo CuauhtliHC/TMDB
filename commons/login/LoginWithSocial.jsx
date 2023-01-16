@@ -1,13 +1,13 @@
 import { Box, Button, Stack } from "@mui/material";
 import GitHubIcon from "@mui/icons-material/GitHub";
-import { loginGitHub } from "../../firebase/client";
+import { loginGitHub, app } from "../../firebase/client";
 import { useAuthContext } from "../../store/user";
 import { useRouter } from "next/router";
 import axios from "axios";
 
 const LoginWithSocial = ({ setMessage, setOpen }) => {
   const router = useRouter();
-  const { setUser } = useAuthContext();
+  const { setUser, setData } = useAuthContext();
   const handleClick = () => {
     loginGitHub()
       .then((credentials) => {
@@ -15,7 +15,7 @@ const LoginWithSocial = ({ setMessage, setOpen }) => {
         axios
           .get(`/api/favorites/byUserOnlyId/${uid}`)
           .then((res) => {
-            setUser({ displayName, email, photoURL, uid, data: res.data });
+            setUser({ displayName, email, photoURL, uid });
             localStorage.setItem(
               "user",
               JSON.stringify({
@@ -23,9 +23,10 @@ const LoginWithSocial = ({ setMessage, setOpen }) => {
                 email,
                 photoURL,
                 uid,
-                data: res.data,
               })
             );
+            setData({ fav: res.data });
+            localStorage.setItem("data", JSON.stringify({ fav: res.data }));
             router.push("/");
           })
           .catch((err) => console.error(err));

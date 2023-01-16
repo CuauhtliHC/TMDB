@@ -1,4 +1,4 @@
-import firestore from "../../../../utils/db/firestore";
+const { adminApp } = require("../../../../utils/db/index");
 
 export default async (req, res) => {
   const { uid } = req.query;
@@ -6,20 +6,34 @@ export default async (req, res) => {
     .then(({ docs }) => {
       const favorites = docs.map((doc) => {
         const data = doc.data();
-        return data;
+        const { id_movie } = data;
+        return { ...data, id: id_movie };
       });
-      res.status(200).json(favorites);
+      getTotalPages(uid).then((num) => {
+        res
+          .status(200)
+          .json({ favorites, total_pages: num < 20 ? 1 : Math.ceil(num / 20) });
+      });
     })
     .catch((error) => {
       console.log(error);
-      //   res.status(500).json({ error });
+      res.status(500).json({ error });
     });
 };
 
 const getFavoritesByUser = (uid) => {
-  return firestore
+  return adminApp
+    .firestore()
     .collection("favorites")
     .where("uid", "==", uid)
-    .limit(1)
     .get();
+};
+
+const getTotalPages = async (uid) => {
+  const { docs } = await adminApp
+    .firestore()
+    .collection("favorites")
+    .where("uid", "==", uid)
+    .get();
+  return docs.length;
 };

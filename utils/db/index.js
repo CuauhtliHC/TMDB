@@ -1,18 +1,12 @@
-import admin from "firebase-admin";
+import * as admin from "firebase-admin";
 import serviceAccount from "../../tmdb-b6b20-firebase-adminsdk-3741q-23771f0ecf.json";
 
-if (!admin.apps.length) {
-  try {
-    admin.initializeApp(
-      {
-        credential: admin.credential.cert(serviceAccount),
-        databaseURL: "https://tmdb-b6b20-default-rtdb.firebaseio.com",
-      },
-      "admin"
-    );
-  } catch (error) {
-    console.log("Firebase admin initialization error", error.stack);
-  }
+if (admin.apps.length == 0) {
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: "https://tmdb-b6b20-default-rtdb.firebaseio.com",
+  });
+  admin.firestore().settings({ ignoreUndefinedProperties: true });
 }
 
-export default admin;
+export const adminApp = admin.app();

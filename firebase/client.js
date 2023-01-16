@@ -21,7 +21,7 @@ const firebaseConfig = {
 
 const provider = new GithubAuthProvider();
 
-export const app = initializeApp(firebaseConfig);
+export const app = initializeApp(firebaseConfig, "client");
 export const auth = getAuth(app);
 export const login = async (email, password) =>
   await signInWithEmailAndPassword(auth, email, password);

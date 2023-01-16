@@ -14,7 +14,7 @@ import { useAuthContext } from "../../store/user";
 import axios from "axios";
 
 export default function MediaCard({ movie, url }) {
-  const { user, data } = useAuthContext();
+  const { user, data, setData } = useAuthContext();
   const router = useRouter();
   const date = new Date(
     movie.release_date ? movie.release_date : movie.first_air_date
@@ -24,19 +24,44 @@ export default function MediaCard({ movie, url }) {
   const year = date.getFullYear();
 
   const addOrRemoveFav = () => {
-    axios
-      .post(`/api/favorites/add/${user.uid}`, {
-        id: movie.id,
-        title: movie.title,
-        poster_path: movie.poster_path,
-        type: url,
-        release_date: movie.release_date,
-        vote_average: movie.vote_average,
-        first_air_date: movie.first_air_date,
-        name: movie.name,
-      })
-      .then((res) => console.log(res))
-      .catch((err) => console.error(err));
+    if (data.fav.some((element) => element === movie.id)) {
+      axios
+        .delete(`/api/favorites/remove/${user.uid}?id=${movie.id}`)
+        .then((res) => {
+          axios
+            .get(`/api/favorites/byUserOnlyId/${user.uid}`)
+            .then((res) => {
+              setData({ fav: res.data });
+              localStorage.removeItem("data");
+              localStorage.setItem("data", JSON.stringify({ fav: res.data }));
+            })
+            .catch((err) => console.error(err));
+        })
+        .catch((err) => console.error(err));
+    } else {
+      axios
+        .post(`/api/favorites/add/${user.uid}`, {
+          id: movie.id,
+          title: movie.title,
+          poster_path: movie.poster_path,
+          type: url,
+          release_date: movie.release_date,
+          vote_average: movie.vote_average,
+          first_air_date: movie.first_air_date,
+          name: movie.name,
+        })
+        .then((result) => {
+          axios
+            .get(`/api/favorites/byUserOnlyId/${user.uid}`)
+            .then((res) => {
+              setData({ fav: res.data });
+              localStorage.removeItem("data");
+              localStorage.setItem("data", JSON.stringify({ fav: res.data }));
+            })
+            .catch((err) => console.error(err));
+        })
+        .catch((err) => console.error(err));
+    }
   };
 
   return (

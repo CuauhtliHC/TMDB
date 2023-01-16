@@ -1,4 +1,4 @@
-import db from "../../../utils/db";
+const { adminApp } = require("../../../utils/db/index");
 
 export default async (req, res) => {
   const { page } = req.query;
@@ -18,7 +18,7 @@ export default async (req, res) => {
 
 const countUsers = async () => {
   let totalUsers = 0;
-  const result = await db.auth().listUsers();
+  const result = await adminApp.auth().listUsers();
   totalUsers = result.users.length;
   return totalUsers;
 };
@@ -32,7 +32,7 @@ const getUsers = async (limit, page) => {
   let pageToken;
   let users = [];
   for (let i = 0; i < page; i++) {
-    const listUsersResult = await db.auth().listUsers(limit, pageToken);
+    const listUsersResult = await adminApp.auth().listUsers(limit, pageToken);
     pageToken = listUsersResult.pageToken;
     const listUsers = listUsersResult.users.map((user) => {
       return {

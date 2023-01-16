@@ -14,6 +14,7 @@ import { login } from "../firebase/client";
 import { useAuthContext } from "../store/user";
 import { useRouter } from "next/router";
 import AlertFirebase from "../commons/alerts/AlertFirebase";
+import axios from "axios";
 
 const Login = () => {
   const [email, setEmail] = useState(null);

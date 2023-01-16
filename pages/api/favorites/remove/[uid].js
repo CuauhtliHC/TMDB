@@ -1,14 +1,11 @@
 const { adminApp } = require("../../../../utils/db/index");
 
 export default async (req, res) => {
-  const { uid } = req.query;
-  getFavoritesByUser(uid)
+  const { uid, id } = req.query;
+  removeFavorite(uid, id)
     .then(({ docs }) => {
-      const favorites = docs.map((doc) => {
-        const data = doc.data();
-        return data.id_movie;
-      });
-      res.status(200).json(favorites);
+      docs.forEach((doc) => doc.ref.delete());
+      res.status(204).send("success");
     })
     .catch((error) => {
       console.log(error);
@@ -16,10 +13,11 @@ export default async (req, res) => {
     });
 };
 
-const getFavoritesByUser = (uid) => {
+const removeFavorite = (uid, id) => {
   return adminApp
     .firestore()
     .collection("favorites")
     .where("uid", "==", uid)
+    .where("id_movie", "==", parseInt(id))
     .get();
 };

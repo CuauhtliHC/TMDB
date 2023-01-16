@@ -1,4 +1,4 @@
-import firestore from "../../../../utils/db/firestore";
+const { adminApp } = require("../../../../utils/db/index");
 
 export default async (req, res) => {
   const { uid } = req.query;
@@ -23,8 +23,11 @@ export default async (req, res) => {
     first_air_date,
     name
   )
-    .then((res) => console.log(res))
-    .catch((err) => console.error(err));
+    .then((result) => res.status(200).send("Success"))
+    .catch((error) => {
+      console.error(error);
+      res.status(500).json({ error });
+    });
 };
 
 const add = (
@@ -38,9 +41,9 @@ const add = (
   first_air_date,
   name
 ) => {
-  return firestore.collection("favorites").add({
+  return adminApp.firestore().collection("favorites").add({
     uid,
-    id,
+    id_movie: id,
     title,
     poster_path,
     type,

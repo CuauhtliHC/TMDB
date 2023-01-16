@@ -3,7 +3,8 @@ import fetch from "isomorphic-fetch";
 import Head from "next/head";
 import ListItems from "../../../components/list";
 
-const Favorites = ({ fav, favorites }) => {
+const Favorites = ({ fav }) => {
+  console.log(fav);
   return (
     <>
       <Head>
@@ -21,23 +22,14 @@ const Favorites = ({ fav, favorites }) => {
 export default Favorites;
 
 export async function getServerSideProps({ query }) {
-  const favorites = await fetch(
+  const resFavorites = await fetch(
     `http://localhost:3000/api/favorites/byUser/${query.user}`
   );
-  const dataFav = await favorites.json();
-
-  const fav = new Array(20).fill({
-    release_date: "2009-10-10",
-    title: "Avatar: The Way of Water",
-    poster_path: "/t6HIqrRAclMCA60NsSmeqe9RmNV.jpg",
-    vote_average: 7.7,
-    id: 76600,
-    type: "movies",
-  });
+  const { favorites, total_pages } = await resFavorites.json();
 
   return {
     props: {
-      fav: { results: dataFav, total_pages: 10 },
+      fav: { results: favorites, total_pages: total_pages },
     },
   };
 }

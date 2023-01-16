@@ -69,6 +69,10 @@ export default function Home({ popularMovies, popularTvShow }) {
                   fontSize="3em"
                   fontWeight="700"
                   lineHeight="1"
+                  sx={{
+                    WebkitTextStrokeWidth: "1px",
+                    WebkitTextStrokeColor: "black",
+                  }}
                 >
                   Bienvenidos
                 </Typography>
@@ -81,6 +85,10 @@ export default function Home({ popularMovies, popularTvShow }) {
                   boxSizing="border-box"
                   margin={0}
                   display="block"
+                  sx={{
+                    WebkitTextStrokeWidth: "1px",
+                    WebkitTextStrokeColor: "black",
+                  }}
                 >
                   Millones de películas, programas de televisión y personas por
                   descubrir

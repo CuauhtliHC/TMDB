@@ -3,7 +3,6 @@ import Head from "next/head";
 import IndvidualVist from "../../components/individualVist";
 
 const DetailTvShow = ({ tvshow, credits, videos }) => {
-  console.log(tvshow);
   return (
     <>
       <Head>

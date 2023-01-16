@@ -142,6 +142,7 @@ function ResponsiveAppBar({ toggleTheme }) {
       signOutUser().then(() => {
         setUser(null);
         localStorage.removeItem("user");
+        localStorage.removeItem("data");
         router.push("/");
       });
     } else if (setting.name === "Favoritos")
