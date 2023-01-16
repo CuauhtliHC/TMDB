@@ -3,7 +3,7 @@ import GitHubIcon from "@mui/icons-material/GitHub";
 import { loginGitHub, app } from "../../firebase/client";
 import { useAuthContext } from "../../store/user";
 import { useRouter } from "next/router";
-import axios from "axios";
+import axios from "../../utils/axios/index";
 
 const LoginWithSocial = ({ setMessage, setOpen }) => {
   const router = useRouter();

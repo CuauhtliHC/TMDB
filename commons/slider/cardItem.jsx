@@ -11,7 +11,7 @@ import CircularProgressWithLabel from "./Rating";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { useAuthContext } from "../../store/user";
-import axios from "axios";
+import axios from "../../utils/axios/index";
 
 export default function MediaCard({ movie, url }) {
   const { user, data, setData } = useAuthContext();
