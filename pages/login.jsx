@@ -8,7 +8,7 @@ import {
   InputLabel,
 } from "@mui/material";
 import Head from "next/head";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LoginWithSocial from "../commons/login/LoginWithSocial";
 import { login } from "../firebase/client";
 import { useAuthContext } from "../store/user";
