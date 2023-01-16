@@ -15,6 +15,7 @@ import { useAuthContext } from "../store/user";
 import { useRouter } from "next/router";
 import AlertFirebase from "../commons/alerts/AlertFirebase";
 import axios from "axios";
+import getConfig from "next/config";
 
 const Login = () => {
   const [email, setEmail] = useState(null);
@@ -23,6 +24,14 @@ const Login = () => {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState(false);
+  const { publicRuntimeConfig } = getConfig();
+  const [myEnv, setMyEnv] = useState(null);
+
+  useEffect(() => {
+    setMyEnv(publicRuntimeConfig.MY_ENV);
+  }, []);
+
+  console.log(myEnv);
 
   const loginUser = () => {
     setOpen(false);
