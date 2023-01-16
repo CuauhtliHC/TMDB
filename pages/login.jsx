@@ -28,7 +28,7 @@ const Login = () => {
   const [myEnv, setMyEnv] = useState(null);
 
   useEffect(() => {
-    setMyEnv(publicRuntimeConfig.MY_ENV);
+    setMyEnv(publicRuntimeConfig.VERCEL_URL);
   }, []);
 
   console.log(myEnv);
