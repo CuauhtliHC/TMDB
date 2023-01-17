@@ -31,7 +31,9 @@ export default Favorites;
 
 export async function getServerSideProps({ query }) {
   const { page, search } = query;
-  const users = await fetch(`${process.env.VERCEL_URL}/api/users?page=${page}`);
+  const users = await fetch(
+    `https://${process.env.VERCEL_URL}/api/users?page=${page}`
+  );
   const dataUsers = await users.json();
   return {
     props: {

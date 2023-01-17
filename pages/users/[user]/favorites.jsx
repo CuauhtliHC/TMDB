@@ -23,7 +23,7 @@ export default Favorites;
 
 export async function getServerSideProps({ query }) {
   const resFavorites = await fetch(
-    `${process.env.VERCEL_URL}/api/favorites/byUser/${query.user}`
+    `https://${process.env.VERCEL_URL}/api/favorites/byUser/${query.user}`
   );
   const { favorites, total_pages } = await resFavorites.json();
 
