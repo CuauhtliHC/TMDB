@@ -36,3 +36,5 @@ tmdb-b6b20-firebase-adminsdk-3741q-23771f0ecf.json
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+sdk.json

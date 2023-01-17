@@ -19,4 +19,5 @@ if (admin.apps.length == 0) {
   admin.firestore().settings({ ignoreUndefinedProperties: true });
 }
 
+console.log(process.env.process.env.FIREBASE_PRIVATE_KEY);
 export const adminApp = admin.app();
