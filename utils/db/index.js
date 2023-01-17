@@ -1,6 +1,7 @@
 import * as admin from "firebase-admin";
 
 if (admin.apps.length == 0) {
+  console.log(process.env.FIREBASE_PRIVATE_KEY);
   admin.initializeApp({
     credential: admin.credential.cert({
       type: process.env.TYPE,
@@ -18,6 +19,4 @@ if (admin.apps.length == 0) {
   });
   admin.firestore().settings({ ignoreUndefinedProperties: true });
 }
-
-console.log(process.env.process.env.FIREBASE_PRIVATE_KEY);
 export const adminApp = admin.app();
